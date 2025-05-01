@@ -12,6 +12,8 @@ Get a minimal rails app ready to be deployed on Heroku with Bootstrap, Simple fo
 ```bash
 rails new \
   -d postgresql \
+  -c boostrape \
+  -j esbuild \
   -m https://raw.githubusercontent.com/daviddicke/rails-templates/master/minimal.rb \
   CHANGE_THIS_TO_YOUR_RAILS_APP_NAME
 ```
@@ -23,6 +25,8 @@ Same as minimal **plus** a Devise install with a generated `User` model.
 ```bash
 rails new \
   -d postgresql \
+  -c boostrape \
+  -j esbuild \
   -m https://raw.githubusercontent.com/daviddicke/rails-templates/master/devise.rb \
   CHANGE_THIS_TO_YOUR_RAILS_APP_NAME
 ```
