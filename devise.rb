@@ -4,12 +4,10 @@ run "if uname | grep -q 'Darwin'; then pgrep spring | xargs kill -9; fi"
 ########################################
 inject_into_file "Gemfile", before: "group :development, :test do" do
   <<~RUBY
-    gem "bootstrap", "~> 5.2"
     gem "devise"
     gem "autoprefixer-rails"
     gem "font-awesome-sass", "~> 6.1"
     gem "simple_form", github: "heartcombo/simple_form"
-    gem "sassc-rails"
 
   RUBY
 end
@@ -62,11 +60,8 @@ file "app/views/shared/_flashes.html.erb", <<~HTML
   <% end %>
 HTML
 
-run "curl -L https://raw.githubusercontent.com/lewagon/awesome-navbars/master/templates/_navbar_wagon.html.erb > app/views/shared/_navbar.html.erb"
-
 inject_into_file "app/views/layouts/application.html.erb", after: "<body>" do
   <<~HTML
-    <%= render "shared/navbar" %>
     <%= render "shared/flashes" %>
   HTML
 end
@@ -77,26 +72,6 @@ markdown_file_content = <<~MARKDOWN
   Rails app generated with [lewagon/rails-templates](https://github.com/lewagon/rails-templates), created by the [Le Wagon coding bootcamp](https://www.lewagon.com) team.
 MARKDOWN
 file "README.md", markdown_file_content, force: true
-
-# Generators
-########################################
-generators = <<~RUBY
-  config.generators do |generate|
-    generate.assets false
-    generate.helper false
-    generate.test_framework :test_unit, fixture: false
-  end
-RUBY
-
-environment generators
-
-# General Config
-########################################
-general_config = <<~RUBY
-  config.action_controller.raise_on_missing_callback_actions = false if Rails.version >= "7.1.0"
-RUBY
-
-environment general_config
 
 ########################################
 # After bundle
@@ -169,27 +144,6 @@ after_bundle do
   ########################################
   environment 'config.action_mailer.default_url_options = { host: "http://localhost:3000" }', env: "development"
   environment 'config.action_mailer.default_url_options = { host: "http://TODO_PUT_YOUR_DOMAIN_HERE" }', env: "production"
-
-  # Bootstrap & Popper
-  ########################################
-  append_file "config/importmap.rb", <<~RUBY
-    pin "bootstrap", to: "bootstrap.min.js", preload: true
-    pin "@popperjs/core", to: "popper.js", preload: true
-  RUBY
-
-  append_file "config/initializers/assets.rb", <<~RUBY
-    Rails.application.config.assets.precompile += %w(bootstrap.min.js popper.js)
-  RUBY
-
-  append_file "app/javascript/application.js", <<~JS
-    import "@popperjs/core"
-    import "bootstrap"
-  JS
-
-  append_file "app/assets/config/manifest.js", <<~JS
-    //= link popper.js
-    //= link bootstrap.min.js
-  JS
 
   # Heroku
   ########################################
