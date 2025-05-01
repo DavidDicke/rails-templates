@@ -15,11 +15,7 @@ inject_into_file "Gemfile", after: "group :development, :test do" do
 end
 
 inject_into_file "Gemfile", after: "group :test do" do
-  <<~RUBY
-    # gem "rspec-rails", "~> 7.1"
-    gem "launchy"
-
-  RUBY
+    "\n  # gem \"rspec-rails\", \"~> 7.1\"\n  gem \"launchy\""
 end
 
 # Assets
