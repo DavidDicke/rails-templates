@@ -4,12 +4,9 @@ run "if uname | grep -q 'Darwin'; then pgrep spring | xargs kill -9; fi"
 ########################################
 inject_into_file "Gemfile", before: "group :development, :test do" do
   <<~RUBY
-    gem "bootstrap", "~> 5.2"
     gem "autoprefixer-rails"
     gem "font-awesome-sass", "~> 6.1"
     gem "simple_form", github: "heartcombo/simple_form"
-    gem "sassc-rails"
-
   RUBY
 end
 
@@ -95,27 +92,6 @@ after_bundle do
     *.swp
     .DS_Store
   TXT
-
-  # Bootstrap & Popper
-  ########################################
-  append_file "config/importmap.rb", <<~RUBY
-    pin "bootstrap", to: "bootstrap.min.js", preload: true
-    pin "@popperjs/core", to: "popper.js", preload: true
-  RUBY
-
-  append_file "config/initializers/assets.rb", <<~RUBY
-    Rails.application.config.assets.precompile += %w(bootstrap.min.js popper.js)
-  RUBY
-
-  append_file "app/javascript/application.js", <<~JS
-    import "@popperjs/core"
-    import "bootstrap"
-  JS
-
-  append_file "app/assets/config/manifest.js", <<~JS
-    //= link popper.js
-    //= link bootstrap.min.js
-  JS
 
   # Heroku
   run "bundle lock --add-platform x86_64-linux"
